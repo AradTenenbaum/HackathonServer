@@ -52,4 +52,26 @@ router.get("/results", verify, async (req, res) => {
   }
 });
 
+// Vote - pollID, personalID, voteList
+router.post('/vote', verify, async (req, res) => {
+  try {
+    let poll = await Poll.findOne({_id: req.body.pollID});
+    // Check if haven't voted
+    const isUserVoted = poll.usersVoted.find((user) => user === req.body.personalID);
+    if(isUserVoted) return res.status(400).send('You already voted');
+    poll.usersVoted.push(req.body.personalID);
+    poll.resourceList.map((resource) => {
+      req.body.voteList.map((vote) => {
+        if(resource.resourceID === vote.resourceID) {
+          resource.votes = resource.votes + 1;
+        }
+      });
+    });
+    await poll.save();
+    res.send('Vote sent succesfully');
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
 module.exports = router;

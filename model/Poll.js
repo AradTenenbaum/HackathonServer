@@ -24,6 +24,10 @@ const pollSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    usersVoted: {
+        type: [String],
+        default: []
+    },
     resourceList: {
         type: [resourceVoteSchema],
         required: true
