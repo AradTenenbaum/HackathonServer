@@ -4,6 +4,8 @@ const PORT = 5000;
 
 const userRoute = require('./routes/users');
 const resourceRoute = require('./routes/resources');
+const pollRoute = require('./routes/polls');
+
 
 require('dotenv/config');
 const app = express();
@@ -15,6 +17,7 @@ app.use(cors());
 // Routes
 app.use('/user', userRoute);
 app.use('/resource', resourceRoute);
+app.use('/poll', pollRoute);
 
 mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true}, () => {
     console.log('DB Connected');
