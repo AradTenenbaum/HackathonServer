@@ -2,6 +2,8 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../model/User");
+const Kitchen = require("../model/Kitchen");
+
 
 // Register - personalID, password, kitchenName
 router.post("/register", async (req, res) => {
@@ -20,14 +22,17 @@ router.post("/register", async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
   // Get kitchen
-
+  const kitchen = await Kitchen.findOne({name: req.body.kitchenName});
+  // Check if kitchen exists
+  if(!kitchen) return res.status(400).send('Kitchen not exists');
   // Check if cook
-
+  const isInCookList = kitchen.workersList.find((worker) => worker === req.body.personalID);
   // Create User
   const user = new User({
     personalID: req.body.personalID,
-    kitchenID: 2,
+    kitchenID: kitchen._id,
     password: hashedPassword,
+    isCook: isInCookList ? true : false
   });
   // Save user to DB
   try {
