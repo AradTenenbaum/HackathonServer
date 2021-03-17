@@ -32,8 +32,8 @@ router.get("/history", verify, async (req, res) => {
   }
 });
 
-// Get today's results - kitchenID
-router.get("/results", verify, async (req, res) => {
+// Get today's polls - kitchenID
+router.get("/polls", verify, async (req, res) => {
   try {
     // Get last from db
     const polls = await Poll.find({ kitchenID: req.body.kitchenID });
