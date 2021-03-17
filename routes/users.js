@@ -43,7 +43,6 @@ router.post('/login', async (req, res) => {
     // Check if personalID exists
     const personalIDExist = await User.findOne({ personalID: req.body.personalID });
     if (!personalIDExist) return res.status(400).send("PersonalID has no user");
-    console.log(personalIDExist);
     // Compare passwords
     const validPass = await bcrypt.compare(req.body.password, personalIDExist.password);
     if(!validPass) return res.status(400).send('Password is wrong'); 
